@@ -34,12 +34,11 @@ export function Contact() {
                 Contact Information
               </motion.h2>
 
-              {contactItems.map((contact, i) => (
+              {contactItems.map((contact) => (
                 <motion.div
                   key={contact.title}
                   className="flex items-start gap-4 cursor-default select-none"
                   variants={itemVariants}
-                  transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.05, y: -3 }}
                 >
                   <div className="w-14 h-14 rounded-lg bg-[--color-primary]/10 flex items-center justify-center select-none">
@@ -60,19 +59,21 @@ export function Contact() {
                   Connect
                 </motion.h2>
                 <div className="flex gap-4">
-                  {socialItems.map((social, i) => (
+                  {socialItems.map((social) => (
                     <motion.a
                       key={social.link}
                       href={social.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-14 h-14 rounded-lg border border-gray-300 bg-white text-black
-                                flex items-center justify-center
-                                transition-transform transition-colors duration-300 ease-in-out
-                                will-change-transform select-none"
+                                flex items-center justify-center select-none"
                       variants={itemVariants}
-                      transition={{ delay: i * 0.1 }}
-                      whileHover={{ scale: 1.1, y: -2, boxShadow: "0px 8px 20px rgba(0,0,0,0.15)" }}
+                      whileHover={{ 
+                        scale: 1.1, 
+                        y: -2, 
+                        boxShadow: "0px 8px 20px rgba(0,0,0,0.15)",
+                        transition: { type: "spring", stiffness: 300, damping: 20 }
+                      }}
                     >
                       <social.icon size={26} className="select-none" />
                     </motion.a>
@@ -91,7 +92,7 @@ export function Contact() {
               </motion.h2>
 
               <motion.form className="space-y-4 select-none" variants={containerVariants}>
-                {formFields.map((field, i) => (
+                {formFields.map((field) => (
                   <motion.input
                     key={field.name}
                     type={field.type}
@@ -101,7 +102,6 @@ export function Contact() {
                                focus:outline-none focus:ring-2 focus:ring-black focus:border-black
                                transition-all text-base select-none"
                     variants={formFieldVariants}
-                    transition={{ delay: i * 0.1 }}
                     whileHover={{ scale: 1.02 }}
                   />
                 ))}
@@ -114,7 +114,6 @@ export function Contact() {
                              focus:outline-none focus:ring-2 focus:ring-black focus:border-black
                              resize-none transition-all text-base select-none"
                   variants={formFieldVariants}
-                  transition={{ delay: 0.3 }}
                   whileHover={{ scale: 1.02 }}
                 />
 
@@ -124,7 +123,6 @@ export function Contact() {
                              hover:shadow-xl hover:scale-105 transition-transform transition-colors duration-300 ease-in-out
                              will-change-transform text-base select-none"
                   variants={formFieldVariants}
-                  transition={{ delay: 0.4 }}
                   whileHover={{ scale: 1.03, y: -2 }}
                 >
                   Send Message
