@@ -1,11 +1,11 @@
+# BJ BA Portfolio Website
 
-  # Portfolio website
+Welcome to my personal portfolio website! 🌟
 
-  This is a code bundle for Portfolio website. The original project is available at https://www.figma.com/design/a1NDcv4BAQRLWIcgA9mqiM/Portfolio-website.
+This is where I showcase my projects, highlight my skills, and share ways to get in touch with me. It’s designed to give you a quick and clear look at the work I’ve done and the areas I’m passionate about.
 
-  ## Running the code
+Feel free to explore the different sections — from my projects to my contact information — and get a sense of my style and capabilities.
 
-  Run `npm i` to install the dependencies.
+**Check it out here:** [View Portfolio](https://username.github.io/portfolio)
 
-  Run `npm run dev` to start the development server.
-  
+I hope you enjoy browsing through it!
