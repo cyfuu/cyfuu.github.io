@@ -6,6 +6,6 @@ This is where I showcase my projects, highlight my skills, and share ways to get
 
 Feel free to explore the different sections — from my projects to my contact information — and get a sense of my style and capabilities.
 
-**Check it out here:** [View Portfolio](https://username.github.io/portfolio)
+**Check it out here:** [View Portfolio](https://cyfuu.github.io/portfolio)
 
 I hope you enjoy browsing through it!
