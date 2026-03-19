@@ -1,4 +1,4 @@
-# BJ BA Portfolio Website
+# cyfuu.dev | Portfolio
 
 Welcome to my personal portfolio website! 🌟
 
