@@ -1,5 +1,15 @@
-<script type="text/javascript">
-  // Redirect any 404 requests back to index.html
-  const path = window.location.pathname;
-  window.location.replace(`/${path}`);
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      const repoBase = "/cyfuu.github.io"; // replace with your repo path
+      const path = window.location.pathname;
+      window.location.replace(`${repoBase}${path}`);
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+</html>
