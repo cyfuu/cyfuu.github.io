@@ -49,9 +49,6 @@ export function InputField({
           whileHover={{ scale: 1.02 }}
         />
       )}
-      {error && (
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-red-500 rounded-full" />
-      )}
     </motion.div>
   );
 }
