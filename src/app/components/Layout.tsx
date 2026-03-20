@@ -3,25 +3,9 @@ import { Navbar } from "./navbar/Navbar";
 import { ScrollToTop } from "./scroll_to_top/ScrollToTop";
 import { useEffect } from "react";
 import bgImage from "../../assets/portfolio.png";
-import logo from "../../assets/logo.svg";
+import logo from "/logo.svg";
 
 export function Layout() {
-  useEffect(() => {
-    const existingLink = document.querySelector(
-      "link[rel='icon']"
-    ) as HTMLLinkElement | null;
-
-    if (existingLink) {
-      existingLink.href = logo;
-    } else {
-      const link = document.createElement("link");
-      link.rel = "icon";
-      link.type = "image/svg+xml";
-      link.href = logo;
-      document.head.appendChild(link);
-    }
-  }, []);
-
   return (
     <div
       className="scroll-container h-screen overflow-y-scroll snap-y snap-proximity bg-[--color-background] scroll-smooth"

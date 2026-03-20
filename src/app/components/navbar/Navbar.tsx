@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { navItems } from "../../constants/navItems";
-import logo from "../../../assets/logo.svg";
+import logo from "/logo.svg";
 
 export function Navbar() {
   const location = useLocation();
