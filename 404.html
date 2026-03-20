@@ -4,8 +4,12 @@
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
     <script>
-      const path = window.location.pathname;
-      window.location.replace(path);
+      const currentPath = window.location.pathname;
+      const isIndex = currentPath === "/" || currentPath === "/index.html";
+
+      if (!isIndex) {
+        window.location.href = `/#${currentPath}`;
+      }
     </script>
   </head>
   <body>
