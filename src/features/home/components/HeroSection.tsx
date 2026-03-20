@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { heroVariants } from "../../../constants/animationVariants";
+import { heroVariants } from "@shared/constants/animationVariants";
 
 export function HeroSection() {
   return (

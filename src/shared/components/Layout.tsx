@@ -1,9 +1,7 @@
 import { Outlet } from "react-router";
-import { Navbar } from "./navbar/Navbar";
-import { ScrollToTop } from "./scroll_to_top/ScrollToTop";
-import { useEffect } from "react";
-import bgImage from "../../assets/portfolio.png";
-import logo from "/logo.svg";
+import { Navbar } from "@shared/components/Navbar";
+import { ScrollToTop } from "@shared/components/ScrollToTop";
+import bgImage from "../assets/portfolio.png";
 
 export function Layout() {
   return (

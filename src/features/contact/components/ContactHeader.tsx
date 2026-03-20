@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { itemVariants } from "../../../constants/animationVariants";
+import { itemVariants } from "@shared/constants/animationVariants";
 
 export function ContactHeader() {
   return (

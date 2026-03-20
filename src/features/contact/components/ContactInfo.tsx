@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { contactItems } from "../../../constants/contactItems";
-import { containerVariants, itemVariants } from "../../../constants/animationVariants";
-import { ContactSocials } from "./ContactSocials";
+import { contactItems } from "../data/contactItems";
+import { ContactSocials } from "../components/ContactSocials";
+import { containerVariants, itemVariants } from "@shared/constants/animationVariants";
 
 export function ContactInfo() {
   return (

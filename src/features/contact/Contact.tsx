@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "../../../constants/animationVariants";
-
-import { ContactHeader } from "./ContactHeader";
-import { ContactInfo } from "./ContactInfo";
-import { ContactForm } from "./ContactForm";
+import { ContactHeader } from "./components/ContactHeader";
+import { ContactInfo } from "./components/ContactInfo";
+import { ContactForm } from "./components/ContactForm";
+import { containerVariants, itemVariants } from "@shared/constants/animationVariants";
 
 export function Contact() {
   return (

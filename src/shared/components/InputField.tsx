@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { formFieldVariants } from "../../constants/animationVariants";
+import { formFieldVariants } from "@shared/constants/animationVariants";
 
 interface InputFieldProps {
   name: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formFields } from "../../constants/formFields";
+import { formFields } from "../data/formFields";
 
 export type FormState = { [key: string]: string; message: string };
 export type FormErrors = { [key: string]: string };

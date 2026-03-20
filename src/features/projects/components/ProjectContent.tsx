@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Wrench } from "lucide-react";
-import { itemVariants } from "../../../constants/animationVariants";
+import { itemVariants } from "@shared/constants/animationVariants";
 
 export function ProjectContent() {
   return (

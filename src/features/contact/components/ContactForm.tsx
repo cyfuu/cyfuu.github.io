@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { formFields } from "../../../constants/formFields";
-import { containerVariants, formFieldVariants, itemVariants } from "../../../constants/animationVariants";
-import { useContactForm } from "../../hooks/useContactForm";
-import { InputField } from "../../inputfield/InputField";
+import { formFields } from "../data/formFields";
+import { useContactForm } from "../hooks/useContactForm";
+import { InputField } from "@shared/components/InputField";
+import { containerVariants, formFieldVariants, itemVariants } from "@shared/constants/animationVariants";
 
 export function ContactForm() {
   const { form, errors, handleChange, handleSubmit } = useContactForm();

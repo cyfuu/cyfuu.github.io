@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { sectionVariants } from "../../../constants/animationVariants";
-import { ProjectHeader } from "./ProjectHeader";
-import { ProjectContent } from "./ProjectContent";
+import { ProjectHeader } from "./components/ProjectHeader";
+import { ProjectContent } from "./components/ProjectContent";
+import { sectionVariants } from "@shared/constants/animationVariants";
 
 export function Projects() {
   return (

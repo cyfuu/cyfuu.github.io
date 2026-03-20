@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { socialItems } from "../../../constants/socialItems";
-import { containerVariants, itemVariants } from "../../../constants/animationVariants";
+import { socialItems } from "../data/socialItems";
+import { containerVariants, itemVariants } from "@shared/constants/animationVariants";
 
 export function ContactSocials() {
   return (

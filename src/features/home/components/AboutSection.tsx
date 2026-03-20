@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { aboutItems } from "../../../constants/aboutItems";
-import { skills } from "../../../constants/skills";
-import { sectionVariants, itemVariants } from "../../../constants/animationVariants";
+import { aboutItems } from "../data/aboutItems";
+import { skills } from "../data/skills";
+import { sectionVariants, itemVariants } from "@shared/constants/animationVariants";
 
 export function AboutSection() {
   return (
