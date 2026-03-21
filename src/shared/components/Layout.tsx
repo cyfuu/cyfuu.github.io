@@ -1,19 +1,13 @@
 import { Outlet } from "react-router";
 import { Navbar } from "@shared/components/Navbar";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
-import bgImage from "../assets/portfolio.png";
+import ParticlesBg from "@shared/components/ParticlesBg";
 
 export function Layout() {
   return (
-    <div
-      className="scroll-container h-screen overflow-y-scroll snap-y snap-proximity bg-[--color-background] scroll-smooth"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
-    >
+    <div className="scroll-container h-screen overflow-y-scroll snap-y snap-proximity bg-[--color-background] scroll-smooth">
+
+      <ParticlesBg/>
       <ScrollToTop />
       <Navbar />
 
