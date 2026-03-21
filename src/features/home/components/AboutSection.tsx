@@ -52,6 +52,9 @@ export function AboutSection() {
           <motion.div
             className="relative w-full h-[120px] sm:h-[140px] md:h-[160px]"
             variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
           >
             <LogoLoop
               logos={techLogos}
