@@ -66,7 +66,7 @@ export function Navbar() {
                 key={item.path}
                 to={item.path}
                 ref={(el) => { linkRefs.current[item.path] = el; }}
-                className="text-white px-4 py-1.5 transition-transform duration-300 hover:scale-110"
+                className="text-white px-4 py-1.5 transition-transform select-none duration-300 hover:scale-110"
               >
                 {item.label}
               </Link>
