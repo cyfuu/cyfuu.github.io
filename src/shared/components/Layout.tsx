@@ -1,13 +1,42 @@
+import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router";
 import { Navbar } from "@shared/components/Navbar";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
 import ParticlesBg from "@shared/components/ParticlesBg";
 
 export function Layout() {
-  return (
-    <div className="scroll-container h-screen overflow-y-scroll snap-y snap-proximity bg-[--color-background] scroll-smooth">
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [snapEnabled, setSnapEnabled] = useState(false);
 
-      <ParticlesBg/>
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const scrollToTop = () => {
+      container.scrollTo({ top: 0, behavior: "auto" });
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    // Initial scroll on mount
+    scrollToTop();
+
+    // Enable snapping after first animation frame
+    requestAnimationFrame(() => setSnapEnabled(true));
+
+    // Extra scroll after small timeout to account for ParticlesBg rendering
+    const timeout = setTimeout(scrollToTop, 50);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`scroll-container h-screen overflow-y-scroll ${
+        snapEnabled ? "snap-y snap-proximity" : ""
+      } bg-[--color-background] scroll-smooth`}
+    >
+      <ParticlesBg />
       <ScrollToTop />
       <Navbar />
 
