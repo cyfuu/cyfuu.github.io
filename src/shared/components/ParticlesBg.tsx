@@ -15,7 +15,7 @@ export default function ParticlesBg() {
   const options: ISourceOptions = {
     fullScreen: {
       enable: true,
-      zIndex: 0, // stay behind content
+      zIndex: -1, // stay behind content
     },
     background: {
       color: "transparent",
