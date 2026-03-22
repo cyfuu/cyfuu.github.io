@@ -1,20 +1,14 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
+import { useScrollToTop } from "@shared/hooks/useScrollToTop";
 
 export function ScrollToTop() {
   const { pathname } = useLocation();
+  const scrollToTop = useScrollToTop();
 
   useEffect(() => {
-    const scrollContainer = document.querySelector(
-      ".scroll-container"
-    ) as HTMLElement | null;
-
-    if (scrollContainer) {
-      scrollContainer.scrollTo({ top: 0, behavior: "instant" });
-    } else {
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-  }, [pathname]);
+    scrollToTop("auto");
+  }, [pathname, scrollToTop]);
 
   return null;
 }

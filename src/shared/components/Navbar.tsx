@@ -3,13 +3,26 @@ import { Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { navItems } from "../constants/navItems";
 import logo from "/logo.svg";
+import { useScrollToTop } from "@shared/hooks/useScrollToTop";
 
 export function Navbar() {
   const location = useLocation();
+  const scrollToTop = useScrollToTop();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+
+  /**
+   * Unified handler for logo + Home nav item
+   */
+  const handleHomeClick = (e: React.MouseEvent, path: string) => {
+    if (path === "/" && location.pathname === "/") {
+      e.preventDefault(); // stop navigation
+      scrollToTop("smooth");
+    }
+  };
 
   // Desktop underline
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +57,13 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-md">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center">
+
+          {/* ✅ Logo uses same logic */}
+          <Link
+            to="/"
+            onClick={(e) => handleHomeClick(e, "/")}
+            className="flex items-center"
+          >
             <img
               src={logo}
               alt="Logo"
@@ -53,19 +72,18 @@ export function Navbar() {
           </Link>
 
           {/* Desktop */}
-          <div
-            ref={containerRef}
-            className="relative hidden md:flex gap-8"
-          >
+          <div ref={containerRef} className="relative hidden md:flex gap-8">
             <span
               className="absolute bottom-0 h-px bg-white rounded-full transition-all duration-300 ease-out"
               style={underlineStyle}
             />
+
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 ref={(el) => { linkRefs.current[item.path] = el; }}
+                onClick={(e) => handleHomeClick(e, item.path)} // ✅ unified logic
                 className="text-white px-4 py-1.5 transition-transform select-none duration-300 hover:scale-110"
               >
                 {item.label}
@@ -88,11 +106,15 @@ export function Navbar() {
             <div className="flex flex-col gap-4">
               {navItems.map((item) => {
                 const active = isActive(item.path);
+
                 return (
                   <Link
                     key={item.path}
                     to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      handleHomeClick(e, item.path); // ✅ same logic
+                      setMobileMenuOpen(false);
+                    }}
                     className="relative text-white px-2 py-1 transition"
                   >
                     {item.label}

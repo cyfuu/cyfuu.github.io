@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Contact } from "../data/contacts";
-import { useContactHover } from "../hooks/useContactHover";
+import { useContactHover } from "@shared/hooks/useContactHover";
 
 interface ContactItemProps {
   contact: Contact;
