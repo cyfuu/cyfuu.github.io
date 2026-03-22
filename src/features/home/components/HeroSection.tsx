@@ -37,15 +37,19 @@ export function HeroSection() {
               <ArrowRight size={18} className="sm:w-5 sm:h-5 select-none" />
             </Link>
 
-            <Link
-              to="/contact"
+            <button
+              onClick={() => {
+                const el = document.getElementById("contact");
+                el?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 border-2 border-gray-300 bg-white text-black font-normal rounded-lg
                         hover:bg-gray-100 hover:border-black hover:shadow-xl hover:scale-105
                         transition-transform transition-colors duration-300 ease-in-out
-                        will-change-transform text-sm sm:text-base select-none"
+                        active:scale-95
+                        text-sm sm:text-base select-none"
             >
               Get In Touch
-            </Link>
+            </button>
           </div>
         </motion.div>
       </div>
