@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cyfuu.dev | Page Not Found</title>
+
+    <script type="text/javascript">
+      var pathSegmentsToKeep = 0; 
+      
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join("/") +
+          "/?/" +
+          l.pathname.slice(1).replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash,
+      );
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-color: #09090b;
+        --text-main: #f4f4f5;
+        --text-muted: #a1a1aa;
+        --accent: #3b82f6;
+        --accent-glow: rgba(59, 130, 246, 0.15);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 32px 32px;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .wrapper {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 2rem;
+      }
+
+      .glitch-wrapper {
+        position: relative;
+      }
+
+      .error-code {
+        font-size: clamp(5rem, 15vw, 8rem);
+        font-weight: 700;
+        line-height: 1;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+        user-select: none;
+      }
+
+      h1 {
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        max-width: 300px;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .redirect-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 0.75rem 1.25rem;
+        border-radius: 99px;
+        box-shadow: 0 0 20px var(--accent-glow);
+      }
+
+      .loader {
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--text-muted);
+        border-bottom-color: var(--accent);
+        border-radius: 50%;
+        display: inline-block;
+        animation: rotation 1s linear infinite;
+      }
+
+      .redirect-text {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      @keyframes rotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="glitch-wrapper">
+        <div class="error-code">404</div>
+      </div>
+      
+      <h1>Lost in cyberspace?</h1>
+      <p>This route doesn't exist, but we are routing you back to safety.</p>
+
+      <div class="redirect-box">
+        <span class="loader"></span>
+        <span class="redirect-text">Rerouting</span>
+      </div>
+    </div>
+  </body>
+</html>
