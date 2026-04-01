@@ -8,7 +8,7 @@ import { techLogos } from "../data/techLogos";
 export function AboutSection() {
   return (
     <motion.section
-      className="snap-section snap-start min-h-[100dvh] flex flex-col border-t border-white/5 pt-16 sm:pt-20 select-none relative z-10"
+      className="snap-section snap-start min-h-[100dvh] flex flex-col pt-16 sm:pt-20 select-none relative z-10"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
