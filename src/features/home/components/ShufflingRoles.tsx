@@ -10,9 +10,8 @@ const roles = [
 export function ShufflingRoles() {
   const [index, setIndex] = useState(0);
   const [displayText, setDisplayText] = useState(roles[0]);
-  const chars = "!<>-_\\/[]{}—=+*^?#________";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&<>[]{}/*-+";
   
-  // Keep track of the previous word to transition FROM it
   const prevWordRef = useRef(roles[0]);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export function ShufflingRoles() {
               return targetText[i] || ""; 
             }
             
-            if (i < Math.floor(iteration + 3)) {
+            if (i < Math.floor(iteration + 4)) {
               return chars[Math.floor(Math.random() * chars.length)];
             }
 
