@@ -16,7 +16,7 @@ export function ContactSection() {
       variants={sectionVariants}
     >
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid md:grid-cols-2 gap-4 sm:gap-8 md:gap-12 lg:gap-24 items-start">
+        <div className="grid md:grid-cols-2 gap-10 sm:gap-8 md:gap-12 lg:gap-24 items-start">
           
           {/* LEFT: Branding */}
           <div className="flex flex-col gap-8 md:gap-10">
@@ -39,13 +39,19 @@ export function ContactSection() {
             </motion.div>
 
             {/* Social Buttons */}
-            <div className="flex flex-wrap gap-3 sm:gap-4">
+            <motion.div 
+              className="flex flex-wrap gap-3 sm:gap-4"
+              variants= {sectionVariants}
+            >
               {socialLinks.map((link, i) => (
-                <div key={i}>
+                <motion.div 
+                  key={i}
+                  variants={itemVariants}
+                >
                   <SocialButton link={link} />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* RIGHT: Contact Containers */}

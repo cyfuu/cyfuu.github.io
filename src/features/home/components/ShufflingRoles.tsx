@@ -54,11 +54,11 @@ export function ShufflingRoles() {
   }, [index]);
 
   return (
-  <div className="flex items-center text-[--color-text-secondary] font-mono min-h-[1.5em] w-full max-w-full">
-    <span className="inline-block truncate">
-      {displayText}
-    </span>
-    <span className="ml-2 flex-shrink-0 w-1.5 sm:w-2 h-[1em] bg-[--color-primary] animate-pulse" />
-  </div>
-);
+    <div className="flex items-center justify-center sm:justify-start text-[--color-text-secondary] font-mono min-h-[1.5em] w-full max-w-full">
+      <span className="inline-block truncate">
+        {displayText}
+      </span>
+      <span className="ml-2 flex-shrink-0 w-1.5 sm:w-2 h-[1em] bg-[--color-primary] animate-pulse" />
+    </div>
+  );
 }
