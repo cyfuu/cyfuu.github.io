@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 const roles = [
   "IT Student",
   "Aspiring Software Engineer",
-  "Frontend Explorer",
+  "Frontend Enthusiast",
   "Tech Explorer",
 ];
 
