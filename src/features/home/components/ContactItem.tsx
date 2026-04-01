@@ -15,38 +15,32 @@ export function ContactItem({ contact }: ContactItemProps) {
       onClick={() => copyable && handleCopy(value, label)}
       onHoverStart={() => onHoverStart(label)}
       onHoverEnd={onHoverEnd}
-      className="relative flex items-start gap-4 group cursor-pointer rounded-lg px-3 py-2 overflow-hidden select-none"
-      whileHover={{ scale: 1.05, y: -5 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 400, damping: 14 }}
+      className="relative flex items-center gap-5 group cursor-pointer rounded-2xl px-5 py-4 overflow-hidden select-none border border-transparent hover:border-white/10 hover:bg-white/[0.03] transition-all duration-500 ease-out hover:backdrop-blur-sm"
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      whileHover={{ x: 10 }}
+      whileTap={{ scale: 0.98 }}
     >
-      {/* ICON */}
-      <motion.div
-        animate={hovered === label ? { y: [0, -4, 0] } : { y: 0 }}
-        transition={
-          hovered === label
-            ? { duration: 0.6, repeat: Infinity, ease: "easeInOut" }
-            : { duration: 0.2 }
-        }
-      >
-        <Icon size={22} className="mt-1" />
-      </motion.div>
-
-      {/* TEXT */}
-      <div>
-        <p className="text-sm text-[--color-text-secondary] mb-1 group-hover:text-white transition">{label}</p>
-        <p className="text-base group-hover:translate-x-1 transition">{copied === label ? "Copied!" : value}</p>
+      {/* ICON Container */}
+      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[--color-primary]/10 border border-white/5 group-hover:border-[--color-primary]/20 transition-all duration-300">
+        <Icon 
+          size={20} 
+          className="text-white/40 group-hover:text-[--color-primary] transition-colors" 
+        />
       </div>
 
-      {/* GLOW */}
-      <motion.div
-        className="absolute inset-0 rounded-lg pointer-events-none"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
-      >
-        <div className="w-full h-full bg-[radial-gradient(circle_at_left,rgba(255,255,255,0.08),transparent_70%)]" />
-      </motion.div>
+      {/* TEXT */}
+      <div className="flex flex-col relative z-10">
+        <span className="text-[10px] uppercase tracking-[0.25em] text-white/20 font-bold mb-1 group-hover:text-[--color-primary]/60 transition-colors">
+          {label}
+        </span>
+        
+        <span className="text-base sm:text-lg text-white/60 group-hover:text-white transition-colors font-mono tracking-tight">
+          {copied === label ? "Copied to clipboard!" : value}
+        </span>
+      </div>
+
+      {/* Hover Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[--color-primary]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
     </motion.div>
   );
 }

@@ -9,39 +9,52 @@ export function ContactSection() {
   return (
     <motion.section
       id="contact"
-      className="snap-section snap-start min-h-screen border-t border-[--color-border] pt-16 flex items-center select-none"
+      className="snap-section snap-start min-h-screen pt-16 flex items-center select-none relative z-10"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
-      variants={sectionVariants} // parent section controls stagger
+      variants={sectionVariants}
     >
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-start">
+          
+          {/* LEFT: Branding */}
+          <div className="flex flex-col gap-10">
+            <motion.div className="flex flex-col gap-6" variants={sectionVariants}>
+              <motion.h2 
+                className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight text-white" 
+                variants={itemVariants}
+              >
+                Let's build <br /> 
+                <span className="text-white/40">something great.</span>
+              </motion.h2>
 
-          {/* LEFT */}
-          <motion.div className="flex flex-col gap-8" variants={sectionVariants}>
-            <motion.h2 className="text-3xl sm:text-4xl md:text-5xl leading-tight select-none" variants={itemVariants}>
-              Come say hi!
-            </motion.h2>
-
-            <motion.p className="text-[--color-text-secondary] max-w-md select-none" variants={itemVariants}>
-              I'm always open to discussing opportunities, collaborations, or just connecting.
-            </motion.p>
+              <motion.p className="text-white/60 text-lg max-w-md leading-relaxed" variants={itemVariants}>
+                I'm currently looking for new opportunities and collaborations. 
+                Even if you just want to say hi, my inbox is always open.
+              </motion.p>
+            </motion.div>
 
             {/* Social Buttons */}
-            <motion.div className="flex gap-5" variants={sectionVariants}>
+            <div className="flex gap-4">
               {socialLinks.map((link, i) => (
-                <motion.div key={i} variants={itemVariants}>
+                <div key={i}>
                   <SocialButton link={link} />
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* RIGHT */}
-          <motion.div className="flex flex-col gap-10 text-lg" variants={sectionVariants}>
+          {/* RIGHT: Contact Containers */}
+          <motion.div 
+            className="flex flex-col gap-2"
+            variants={sectionVariants}
+          >
             {contacts.map(contact => (
-              <motion.div key={contact.label} variants={itemVariants}>
+              <motion.div 
+                key={contact.label} 
+                variants={itemVariants} 
+              >
                 <ContactItem contact={contact} />
               </motion.div>
             ))}

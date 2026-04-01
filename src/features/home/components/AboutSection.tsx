@@ -8,7 +8,7 @@ import { techLogos } from "../data/techLogos";
 export function AboutSection() {
   return (
     <motion.section
-      className="snap-section snap-start min-h-screen flex flex-col border-t border-[--color-border] pt-16 select-none"
+      className="snap-section snap-start min-h-screen flex flex-col border-t border-white/5 pt-16 select-none relative z-10"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -17,51 +17,62 @@ export function AboutSection() {
       <div className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         {/* About Me */}
-        <motion.div className="mb-12 sm:mb-16" variants={sectionVariants}>
-          <h2 className="mb-8 sm:mb-10 text-center text-2xl sm:text-3xl md:text-4xl">
-            About Me
+        <motion.div variants={itemVariants} className="mb-12">
+          <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-white">
+            Who I Am
           </h2>
-
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-            {aboutItems.map((item) => (
-              <motion.div
-                key={item.title}
-                className="group p-5 sm:p-6 rounded-lg border border-gray-200 bg-white hover:shadow-xl hover:scale-105 transition duration-300 ease-in-out"
-                variants={itemVariants}
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gray-100 flex items-center justify-center mb-3 sm:mb-4">
-                  <div className="transition duration-300 ease-in-out group-hover:scale-150 group-hover:rotate-12">
-                    <item.icon className="text-black" size={20} />
+        </motion.div>
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.15,
+              }
+            }
+          }}
+        >
+          {aboutItems.map((item) => (
+            <motion.div
+              key={item.title}
+              variants={itemVariants}
+              className="group p-6 sm:p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md 
+                        hover:bg-white/10 hover:border-[--color-primary]/40 
+                        transition-all duration-700 ease-out shadow-lg"
+            >
+              {/* Icon Container */}
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[--color-primary]/10 flex items-center justify-center mb-5 border border-white/5">
+                  <div className="transition duration-300 ease-in-out group-hover:scale-125 group-hover:rotate-6">
+                    <item.icon className="text-[--color-primary]" size={24} />
                   </div>
                 </div>
 
-                <h3 className="mb-2 text-lg sm:text-xl text-black">{item.title}</h3>
-                <p className="text-gray-700 text-sm sm:text-base">{item.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  {item.title}
+                </h3>
+                <p className="text-white/60 text-sm sm:text-base leading-relaxed">
+                  {item.description}
+                </p>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Skills */}
-        <motion.div variants={sectionVariants}>
-          <h2 className="mb-8 sm:mb-10 text-center text-2xl sm:text-3xl md:text-4xl">
-            Skills & Technologies
+        <motion.div variants={sectionVariants} className="mt-8 sm:mt-12">
+          <h2 className="mb-12 sm:mb-16 text-center text-xl sm:text-2xl uppercase tracking-[0.2em] text-white/30 font-medium">
+            Core Stack
           </h2>
 
-          {/* Logo Loop Container */}
           <motion.div
-            className="relative w-full h-[120px] sm:h-[140px] md:h-[160px]"
+            className="relative w-full flex items-center overflow-hidden py-4"
             variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
           >
             <LogoLoop
               logos={techLogos}
-              speed={80}
+              speed={40}
               direction="left"
-              logoHeight={48}
-              gap={48}
+              logoHeight={32}
+              gap={80}
               pauseOnHover
               scaleOnHover
               ariaLabel="Skills and technologies"
