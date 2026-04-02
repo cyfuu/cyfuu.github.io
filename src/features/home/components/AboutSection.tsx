@@ -34,7 +34,7 @@ export function AboutSection() {
               key={item.title}
               variants={itemVariants}
               className="group p-5 sm:p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md 
-                        hover:bg-white/10 hover:border-[--color-primary]/40 
+                        hover:bg-white/10 hover:border-[--color-primary]/50 
                         transition-all duration-700 ease-out shadow-lg"
             >
               {/* Card Header */}
@@ -54,7 +54,7 @@ export function AboutSection() {
               </div>
               
               {/* Description */}
-              <p className="text-white/60 text-sm sm:text-base leading-relaxed">
+              <p className="text-white/90 text-sm sm:text-base leading-relaxed">
                 {item.description}
               </p>
             </motion.div>
@@ -63,7 +63,7 @@ export function AboutSection() {
 
         {/* Skills */}
         <motion.div variants={sectionVariants} className="mt-8 sm:mt-12">
-          <h2 className="mb-2 sm:mb-6 text-center text-lg sm:text-xl md:text-2xl uppercase tracking-[0.2em] text-white/30 font-medium">
+          <h2 className="mb-2 sm:mb-6 text-center text-lg sm:text-xl md:text-2xl uppercase tracking-[0.2em] text-white/70 font-medium">
             Core Stack
           </h2>
 

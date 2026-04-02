@@ -30,7 +30,7 @@ export function HeroSection() {
           </h2>
 
           {/* Description */}
-          <p className="text-base sm:text-lg text-white/60 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto sm:mx-0">
+          <p className="text-base sm:text-lg text-white/90 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto sm:mx-0">
             I'm passionate about technology and creating innovative solutions. Welcome to my portfolio where I showcase my projects and share my journey in the world of Information Technology.
           </p>
 
@@ -49,13 +49,13 @@ export function HeroSection() {
                 const el = document.getElementById("contact");
                 el?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 border border-white/10 bg-white/5 backdrop-blur-sm text-white/80 rounded-xl font-medium
-                         hover:bg-white/10 hover:border-white/20 hover:text-white
-                         transition-all duration-300 ease-in-out
-                         active:scale-95 text-base"
+              className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 border border-white/10 bg-white/5 backdrop-blur-sm text-white/90 rounded-xl font-medium
+                        hover:bg-white/10 hover:border-[--color-primary]/50 hover:text-white
+                        transition-all duration-300 ease-in-out
+                        active:scale-95 text-base"
             >
               Get In Touch
-              <Send size={17} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+              <Send size={17} className="opacity-70 group-hover:opacity-100 transition-opacity" />
             </button>
           </div>
         </motion.div>

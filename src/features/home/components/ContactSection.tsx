@@ -26,11 +26,13 @@ export function ContactSection() {
                 variants={itemVariants}
               >
                 Let's build <br /> 
-                <span className="text-white/40">something great.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-400 drop-shadow-sm">
+                  something great.
+                </span>
               </motion.h2>
 
               <motion.p 
-                className="text-white/60 text-base sm:text-lg max-w-md leading-relaxed" 
+                className="text-white/90 text-base sm:text-lg max-w-md leading-relaxed" 
                 variants={itemVariants}
               >
                 I'm currently looking for new opportunities and collaborations. 

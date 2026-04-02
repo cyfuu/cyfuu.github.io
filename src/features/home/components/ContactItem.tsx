@@ -24,17 +24,17 @@ export function ContactItem({ contact }: ContactItemProps) {
       <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[--color-primary]/10 border border-white/5 group-hover:border-[--color-primary]/20 transition-all duration-300">
         <Icon 
           size={20} 
-          className="text-white/40 group-hover:text-[--color-primary] transition-colors" 
+          className="text-white/70 group-hover:text-[--color-primary] transition-colors" 
         />
       </div>
 
       {/* TEXT */}
       <div className="flex flex-col relative z-10">
-        <span className="text-[10px] uppercase tracking-[0.25em] text-white/20 font-bold mb-1 group-hover:text-[--color-primary]/60 transition-colors">
+        <span className="text-[10px] uppercase tracking-[0.25em] text-white/50 font-bold mb-1 group-hover:text-[--color-primary]/80 transition-colors">
           {label}
         </span>
         
-        <span className="text-base sm:text-lg text-white/60 group-hover:text-white transition-colors font-mono tracking-tight">
+        <span className="text-base sm:text-lg text-white/90 group-hover:text-white transition-colors font-mono tracking-tight">
           {copied === label ? "Copied to clipboard!" : value}
         </span>
       </div>

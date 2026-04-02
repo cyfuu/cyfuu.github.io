@@ -19,12 +19,11 @@ export function Navbar() {
    */
   const handleHomeClick = (e: React.MouseEvent, path: string) => {
     if (path === "/" && location.pathname === "/") {
-      e.preventDefault(); // stop navigation
+      e.preventDefault();
       scrollToTop("smooth");
     }
   };
 
-  // Desktop underline
   const containerRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
@@ -54,11 +53,10 @@ export function Navbar() {
   }, [location.pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-transparent backdrop-blur-xl">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
-          {/* ✅ Logo uses same logic */}
           <Link
             to="/"
             onClick={(e) => handleHomeClick(e, "/")}
@@ -83,7 +81,7 @@ export function Navbar() {
                 key={item.path}
                 to={item.path}
                 ref={(el) => { linkRefs.current[item.path] = el; }}
-                onClick={(e) => handleHomeClick(e, item.path)} // ✅ unified logic
+                onClick={(e) => handleHomeClick(e, item.path)}
                 className="text-white px-4 py-1.5 transition-transform select-none duration-300 hover:scale-110"
               >
                 {item.label}

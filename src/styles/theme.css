@@ -95,7 +95,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground bg-gradient-to-br from-[--color-primary] to-violet-900/20 bg-fixed min-h-screen;
   }
 
   /**
