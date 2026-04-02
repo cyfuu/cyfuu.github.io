@@ -13,11 +13,10 @@ export function ContactItem({ contact }: ContactItemProps) {
   return (
     <motion.div
       onClick={() => copyable && handleCopy(value, label)}
-      onHoverStart={() => onHoverStart(label)}
-      onHoverEnd={onHoverEnd}
-      className="relative flex items-center gap-5 group cursor-pointer rounded-2xl px-5 py-4 overflow-hidden select-none border border-transparent hover:border-white/10 hover:bg-white/[0.03] transition-all duration-500 ease-out hover:backdrop-blur-sm"
+      onPointerEnter={(e) => e.pointerType === 'mouse' && onHoverStart(label)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && onHoverEnd()}
+      className="relative flex items-center gap-5 group cursor-pointer rounded-2xl px-5 py-4 overflow-hidden select-none border border-transparent hover:border-white/10 hover:bg-white/[0.03] transition-all duration-500 ease-out hover:backdrop-blur-sm hover:translate-x-[10px]"
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      whileHover={{ x: 10 }}
       whileTap={{ scale: 0.98 }}
     >
       {/* ICON Container */}

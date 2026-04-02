@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { aboutItems } from "../data/aboutItems";
 import { sectionVariants, itemVariants } from "@shared/constants/animationVariants";
@@ -6,6 +7,19 @@ import LogoLoop from "@shared/components/LogoLoop";
 import { techLogos } from "../data/techLogos";
 
 export function AboutSection() {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice(window.matchMedia("(pointer: coarse)").matches);
+    };
+    
+    checkTouch();
+    
+    window.addEventListener("resize", checkTouch);
+    return () => window.removeEventListener("resize", checkTouch);
+  }, []);
+
   return (
     <motion.section
       className="snap-section snap-start min-h-[100dvh] flex flex-col pt-16 sm:pt-20 select-none relative z-10"
@@ -77,8 +91,8 @@ export function AboutSection() {
               direction="left"
               logoHeight={32}
               gap={80}
-              pauseOnHover
-              scaleOnHover
+              pauseOnHover={!isTouchDevice}
+              scaleOnHover={!isTouchDevice}
               ariaLabel="Skills and technologies"
             />
           </motion.div>
