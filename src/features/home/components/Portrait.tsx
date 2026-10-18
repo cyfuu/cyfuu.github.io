@@ -274,7 +274,7 @@ export function Portrait() {
                 <img
                   src={current.src}
                   alt={current.alt}
-                  className="max-h-[62dvh] w-full object-contain"
+                  className="max-h-[62dvh] w-full object-contain select-none"
                 />
               )}
 
