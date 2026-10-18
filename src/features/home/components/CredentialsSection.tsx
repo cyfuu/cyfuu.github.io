@@ -106,6 +106,9 @@ function CertificationRow({
       <div className="min-w-0">
         <h4 className="text-lg font-semibold text-white">{cert.title}</h4>
         <p className="text-white/80">{cert.issuer}</p>
+        <p className="mt-1 text-sm text-white/60">
+          Issued {cert.issued}
+        </p>
 
         {cert.verifyUrl && (
           <a
@@ -137,6 +140,7 @@ export function CredentialsSection() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const pages = chunk(certifications, CERTS_PER_PAGE);
   const lastPage = pages.length - 1;
+  const pagesTooManyForPhone = pages.length > 4;
   const firstShown = page * CERTS_PER_PAGE + 1;
   const lastShown = Math.min((page + 1) * CERTS_PER_PAGE, certifications.length);
 
@@ -154,7 +158,7 @@ export function CredentialsSection() {
   }
 
   const pageButton =
-    "inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+    "h-9 min-w-8 items-center justify-center rounded-md px-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:min-w-9";
 
   return (
     <motion.section
@@ -227,22 +231,36 @@ export function CredentialsSection() {
               {pages.length > 1 && (
                 <nav
                   aria-label="Certifications pages"
-                  className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3"
+                  className="mt-4 flex items-center justify-between gap-3 sm:gap-4"
                 >
-                  <p className="text-sm text-white/60" aria-live="polite">
-                    Showing {firstShown} to {lastShown} of {certifications.length}
+                  {/* Never wraps: the text is short on phones and gives way before the controls do. */}
+                  <p
+                    className="min-w-0 truncate whitespace-nowrap text-sm tabular-nums text-white/60"
+                    aria-live="polite"
+                  >
+                    <span className="hidden sm:inline">Showing </span>
+                    {firstShown} to {lastShown} of {certifications.length}
                   </p>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
                     <button
                       type="button"
                       aria-label="Previous page"
                       disabled={page === 0}
                       onClick={() => setPage((p) => Math.max(0, p - 1))}
-                      className={`${pageButton} text-white/70 hover:text-white disabled:cursor-not-allowed disabled:text-white/30 disabled:hover:text-white/30`}
+                      className={`${pageButton} inline-flex text-white/70 hover:text-white disabled:cursor-not-allowed disabled:text-white/30 disabled:hover:text-white/30`}
                     >
                       <ChevronLeft size={18} aria-hidden="true" />
                     </button>
+
+                    {pagesTooManyForPhone && (
+                      <span
+                        aria-hidden="true"
+                        className="px-1 text-sm tabular-nums text-white/60 sm:hidden"
+                      >
+                        {page + 1} / {pages.length}
+                      </span>
+                    )}
 
                     {pages.map((_, i) => (
                       <button
@@ -251,7 +269,7 @@ export function CredentialsSection() {
                         aria-label={`Page ${i + 1}`}
                         aria-current={i === page ? "page" : undefined}
                         onClick={() => setPage(i)}
-                        className={`${pageButton} ${
+                        className={`${pageButton} ${pagesTooManyForPhone ? "hidden sm:inline-flex" : "inline-flex"} ${
                           i === page
                             ? "bg-primary font-semibold text-primary-foreground"
                             : "text-white/70 hover:text-white"
@@ -266,7 +284,7 @@ export function CredentialsSection() {
                       aria-label="Next page"
                       disabled={page === lastPage}
                       onClick={() => setPage((p) => Math.min(lastPage, p + 1))}
-                      className={`${pageButton} text-white/70 hover:text-white disabled:cursor-not-allowed disabled:text-white/30 disabled:hover:text-white/30`}
+                      className={`${pageButton} inline-flex text-white/70 hover:text-white disabled:cursor-not-allowed disabled:text-white/30 disabled:hover:text-white/30`}
                     >
                       <ChevronRight size={18} aria-hidden="true" />
                     </button>
@@ -277,7 +295,11 @@ export function CredentialsSection() {
           )}
         </div>
       </div>
-      {/*Certificate Viewer*/}
+      {/*
+        Certificate viewer: just the image and a close button. The image box is sized to the
+        image's own aspect ratio so it fills the screen without empty margins, which also means
+        a click anywhere around it lands on the dialog and closes it.
+      */}
       <dialog
         ref={dialogRef}
         aria-label={viewing ? `Certificate: ${viewing.title}` : undefined}
