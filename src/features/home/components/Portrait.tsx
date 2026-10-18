@@ -304,7 +304,7 @@ export function Portrait() {
               </button>
             </div>
 
-            <div className="p-5 sm:p-6">
+            <div className="p-5 sm:p-6 select-none">
               <div className="flex items-baseline justify-between gap-4">
                 <h2 id={titleId} className="text-xl font-semibold">
                   {current.title}

@@ -1,5 +1,6 @@
 import { HeroSection } from "./components/HeroSection";
 import { AboutSection } from "./components/AboutSection";
+import { CredentialsSection } from "./components/CredentialsSection";
 import { ContactSection } from "./components/ContactSection";
 
 export function Home() {
@@ -7,6 +8,7 @@ export function Home() {
     <>
       <HeroSection />
       <AboutSection />
+      <CredentialsSection />
       <ContactSection />
     </>
   );

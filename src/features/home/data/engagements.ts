@@ -30,7 +30,7 @@ export const engagements: Engagement[] = [
   {
     src: `${BASE}portraits/3.jpg`,
     alt: "Describe what is visible in photo 3",
-    title: "CEISSAFP TECH DAY Ideathon Competition 2026",
+    title: "CEISSAFP TECH DAY Ideathon Competition 2025",
     description:
       "This was an ideathon competition held by CEISSAFP in Manila, Philippines. In this event we presented our idea Project MARAHAS: Maritime Reconnaissance and Anomaly Hunting using AI Swarms. The idea was to use a swarm of AI-powered drones to monitor and detect anomalies in the maritime environment, such as illegal fishing or pollution without the need for deploying human resources. My specific contribution on this event was in the research and the presentation of the idea. We got so close to winning but ultimately won 1st runner-up.",
   },
