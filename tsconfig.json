@@ -6,16 +6,17 @@
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "6.0",
-    "baseUrl": "src",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "paths": {
-      "@app/*": ["app/*"],
-      "@features/*": ["features/*"],
-      "@shared/*": ["shared/*"]
+      "@app/*": ["./src/app/*"],
+      "@features/*": ["./src/features/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src"]

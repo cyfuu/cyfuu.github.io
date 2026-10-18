@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Github, ExternalLink, Code2 } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
+import { ExternalLink, Code2 } from "lucide-react";
 import { itemVariants } from "@shared/constants/animationVariants";
 import { projects } from "../data/projects";
 
@@ -50,7 +51,7 @@ export function ProjectContent() {
                     whileHover={{ y: -3, scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <Github size={20} />
+                    <FaGithub size={20} />
                   </motion.a>
 
                   <motion.a 
