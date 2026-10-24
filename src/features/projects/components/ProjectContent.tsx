@@ -1,87 +1,67 @@
-import { motion } from "framer-motion";
-import { FaGithub } from "react-icons/fa";
-import { ExternalLink, Code2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { itemVariants } from "@shared/constants/animationVariants";
-import { projects } from "../data/projects";
+import { Pagination } from "@shared/components/Pagination";
+import { projects, type Project } from "../data/projects";
+import { ProjectCard } from "./ProjectCard";
+import { VideoViewer } from "./VideoViewer";
+
+/** How many projects show per page. Page controls appear once there are more projects than this. */
+const PROJECTS_PER_PAGE = 3;
 
 export function ProjectContent() {
+  const reduceMotion = useReducedMotion();
+  const listRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  // Which card is showing its hover preview. Only one at a time, so videos never pile up.
+  const [previewId, setPreviewId] = useState<number | null>(null);
+  // Which project's video is open maximized, if any.
+  const [viewing, setViewing] = useState<Project | null>(null);
+
+  const pageCount = Math.max(1, Math.ceil(projects.length / PROJECTS_PER_PAGE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const visibleProjects = projects.slice(
+    currentPage * PROJECTS_PER_PAGE,
+    (currentPage + 1) * PROJECTS_PER_PAGE,
+  );
+
+  function changePage(next: number) {
+    setPreviewId(null);
+    setPage(next);
+    // Bring the top of the list back into view so the new page starts at its first project.
+    listRef.current?.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
+  }
+
+  function openVideo(project: Project) {
+    setPreviewId(null);
+    setViewing(project);
+  }
+
   return (
-    <motion.div 
-      className="flex flex-col gap-8 w-full max-w-4xl mx-auto" 
-      variants={itemVariants}
-    >
-      {projects.map((project, index) => (
-        <motion.div
-          key={index}
-          variants={itemVariants}
-          className="group relative w-full bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-[--color-primary]/40 hover:bg-white/[0.04] transition-all duration-500 md:h-[250px]"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] h-full">
-            
-            <div className="h-[200px] md:h-full w-full md:w-[300px] bg-gradient-to-br from-primary/5 to-primary/15 flex items-center justify-center border-b md:border-b-0 md:border-r border-white/10 p-8 overflow-hidden">
-              {project.image ? (
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500" 
-                />
-              ) : (
-                <Code2 size={48} className="text-white/40 group-hover:scale-110 group-hover:text-[--color-primary] transition-all duration-500" />
-              )}
-            </div>
+    <motion.div className="w-full max-w-4xl mx-auto" variants={itemVariants}>
+      <div ref={listRef} className="flex flex-col gap-8 scroll-mt-24">
+        {visibleProjects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            previewing={previewId === project.id}
+            onPreviewChange={setPreviewId}
+            onOpenVideo={openVideo}
+          />
+        ))}
+      </div>
 
-            {/* Project Info */}
-            <div className="p-6 md:p-8 flex flex-col h-full bg-transparent z-10">
-              <div className="flex justify-between items-start mb-1">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-medium text-white leading-tight">
-                    {project.title}
-                  </h3>
-                  <span className="text-white/60 text-xs sm:text-sm font-medium tracking-wide uppercase">
-                    {project.subtitle}
-                  </span>
-                </div>
+      <div className="mt-4">
+        <Pagination
+          page={currentPage}
+          perPage={PROJECTS_PER_PAGE}
+          total={projects.length}
+          onPageChange={changePage}
+          label="Projects pages"
+        />
+      </div>
 
-                <div className="flex gap-4 text-white/80 pt-1">
-                  <motion.a 
-                    href={project.link} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[--color-primary] transition-colors p-1"
-                    whileHover={{ y: -3, scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaGithub size={20} />
-                  </motion.a>
-
-                  <motion.a 
-                    href={project.live} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[--color-primary] transition-colors p-1"
-                    whileHover={{ y: -3, scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <ExternalLink size={20} />
-                  </motion.a>
-                </div>
-              </div>
-
-              <p className="text-white/90 text-sm sm:text-base mt-3 mb-4 leading-relaxed md:line-clamp-2">
-                {project.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {project.tech.map((t) => (
-                  <span key={t} className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/80">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+      <VideoViewer project={viewing} onClose={() => setViewing(null)} />
     </motion.div>
   );
 }

@@ -2,7 +2,7 @@
   "name": "cyfuu/portfolio",
   "homepage": "https://cyfuu.github.io/",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.7",
   "type": "module",
   "scripts": {
     "build": "vite build",
