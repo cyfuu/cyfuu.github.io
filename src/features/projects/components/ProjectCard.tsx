@@ -4,6 +4,7 @@ import { FaGithub } from "react-icons/fa";
 import { ExternalLink, Code2, Maximize2, Play } from "lucide-react";
 import { itemVariants } from "@shared/constants/animationVariants";
 import type { Project } from "../data/projects";
+import type { ViewerOrigin } from "./VideoViewer";
 
 /** How long the mouse has to rest on a card before its video starts, so brushing past does nothing. */
 const HOVER_INTENT_MS = 250;
@@ -13,7 +14,8 @@ interface ProjectCardProps {
   /** True while this card is the one showing its hover preview. Only one card at a time. */
   previewing: boolean;
   onPreviewChange: (id: number | null) => void;
-  onOpenVideo: (project: Project) => void;
+  onOpenVideo: (project: Project, origin: ViewerOrigin) => void;
+  viewerOpen: boolean;
 }
 
 export function ProjectCard({
@@ -21,39 +23,45 @@ export function ProjectCard({
   previewing,
   onPreviewChange,
   onOpenVideo,
+  viewerOpen,
 }: ProjectCardProps) {
   const reduceMotion = useReducedMotion() === true;
   const videoRef = useRef<HTMLVideoElement>(null);
+  const panelRef = useRef<HTMLButtonElement>(null);
   const hoverTimer = useRef<number | undefined>(undefined);
 
   const video = project.video;
   const showPreview = previewing && !reduceMotion;
 
-  // The preview plays only while previewing, and starts over each time.
+  // The preview plays only while previewing, and starts over each time. While the maximized
+  // video is open the preview holds its current frame, so the card behind it doesn't change.
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
     el.muted = true;
-    if (showPreview) {
+    if (showPreview && !viewerOpen) {
       el.play().catch(() => {});
+    } else if (showPreview) {
+      el.pause();
     } else {
       el.pause();
       if (el.readyState > 0) el.currentTime = 0;
     }
-  }, [showPreview]);
+  }, [showPreview, viewerOpen]);
 
   useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
 
   function handlePointerEnter(e: React.PointerEvent) {
     // Mouse only. On touch screens a tap goes straight to the maximized video instead.
-    if (!video || e.pointerType !== "mouse") return;
+    if (!video || viewerOpen || e.pointerType !== "mouse") return;
     window.clearTimeout(hoverTimer.current);
     hoverTimer.current = window.setTimeout(() => onPreviewChange(project.id), HOVER_INTENT_MS);
   }
 
   function handlePointerLeave() {
     window.clearTimeout(hoverTimer.current);
-    if (previewing) onPreviewChange(null);
+    // The viewer covers the page, which counts as the mouse leaving. Don't reset the card for that.
+    if (previewing && !viewerOpen) onPreviewChange(null);
   }
 
   function handleClick(e: React.MouseEvent) {
@@ -61,7 +69,11 @@ export function ProjectCard({
     // The GitHub and live-site links keep doing their own thing.
     if ((e.target as HTMLElement).closest("a")) return;
     window.clearTimeout(hoverTimer.current);
-    onOpenVideo(project);
+    // The maximized video carries on from where the preview had got to.
+    onOpenVideo(project, {
+      el: panelRef.current,
+      startTime: showPreview && videoRef.current ? videoRef.current.currentTime : 0,
+    });
   }
 
   return (
@@ -70,6 +82,7 @@ export function ProjectCard({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onClick={handleClick}
+      data-project-id={project.id}
       className={`group relative w-full bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-[--color-primary]/40 hover:bg-white/[0.04] transition-all duration-500 ${
         video ? "cursor-pointer lg:h-[250px]" : "md:h-[250px]"
       }`}
@@ -85,6 +98,7 @@ export function ProjectCard({
       >
         {video ? (
           <button
+            ref={panelRef}
             type="button"
             aria-label={`Watch the ${project.title} promo video`}
             // Keyboard focus previews just like hovering does. A click or Enter opens the video
@@ -92,16 +106,25 @@ export function ProjectCard({
             onFocus={(e) => {
               if (e.currentTarget.matches(":focus-visible")) onPreviewChange(project.id);
             }}
-            onBlur={() => onPreviewChange(null)}
-            className="relative block aspect-video w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-primary/5 to-primary/15 lg:aspect-auto lg:h-full lg:border-b-0 lg:border-r focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
+            onBlur={() => {
+              if (!viewerOpen) onPreviewChange(null);
+            }}
+            className="relative block cursor-pointer aspect-video w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-primary/5 to-primary/15 lg:aspect-auto lg:h-full lg:border-b-0 lg:border-r focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
           >
-            {/* Idle: the project's image, as before */}
+            {/*
+              Idle: the project's image. It doesn't zoom on hover like the cards without a video,
+              because the video fades in over it and the zoom would show through the fade.
+            */}
             {project.image ? (
-              <div className="flex h-full w-full items-center justify-center p-8">
+              <div
+                className={`flex h-full w-full items-center justify-center p-8 transition-opacity duration-300 ${
+                  showPreview ? "opacity-0" : "opacity-100"
+                }`}
+              >
                 <img
                   src={project.image}
                   alt=""
-                  className="h-full w-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-110"
+                  className="h-full w-full object-contain drop-shadow-2xl"
                 />
               </div>
             ) : (

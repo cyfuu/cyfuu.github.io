@@ -2,12 +2,11 @@
   "name": "cyfuu/portfolio",
   "homepage": "https://cyfuu.github.io/",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
-    "deploy": "node deploy.cjs"
+    "dev": "vite"
   },
   "dependencies": {
     "@emailjs/browser": "^5.0.3",
