@@ -11,3 +11,14 @@
 *::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
 }
+
+/*
+ * The page scrolls inside .scroll-container, not the window. Lock the window itself so
+ * mobile browsers can't scroll it underneath (which pre-scrolls the hero on load).
+ */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}

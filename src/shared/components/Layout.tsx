@@ -14,9 +14,13 @@ export function Layout() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Don't let the browser restore an old scroll position on reload.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+    // "instant" (not "auto") because the container has scroll-smooth, which would animate "auto".
     const scrollToTop = () => {
-      container.scrollTo({ top: 0, behavior: "auto" });
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      container.scrollTo({ top: 0, behavior: "instant" });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     };
 
     scrollToTop();
@@ -30,7 +34,7 @@ export function Layout() {
     <ScrollContainerContext.Provider value={containerRef}>
       <div
         ref={containerRef}
-        className={`scroll-container h-screen overflow-y-scroll ${
+        className={`scroll-container h-dvh overflow-y-scroll ${
           snapEnabled ? "snap-y snap-proximity" : ""
         } bg-[--color-background] scroll-smooth`}
       >

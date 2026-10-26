@@ -6,7 +6,17 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { motion, useReducedMotion, type PanInfo } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useTransform,
+  type AnimationPlaybackControls,
+  type MotionValue,
+  type PanInfo,
+} from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize2, Pause, Play, X } from "lucide-react";
 import { engagements } from "../data/engagements";
 
@@ -14,22 +24,109 @@ const PHOTOS = engagements;
 const COUNT = PHOTOS.length;
 const LABEL = "Most Memorable Engagements";
 const AUTOPLAY_MS = 5000;
-const SWIPE_DISTANCE = 50; // px dragged before it counts as a swipe
-const SWIPE_VELOCITY = 400; // px/s, for quick flicks
+const SPRING = { type: "spring" as const, stiffness: 220, damping: 30 };
+const SIDE_SHIFT = 0.17; // neighbour offset as a fraction of the slide width
+const FLING_SECONDS = 0.2; // how far ahead a flick's velocity is projected
+const DRAG_SPAN = 0.4; // fraction of the stage width you drag to move one full slide
+const MAX_FLING_SLIDES = 2; // most extra slides a single flick can carry
 
-/** Shortest signed distance from the current slide, wrapping around the ends. */
-function offsetFrom(index: number, current: number) {
-  let d = (((index - current) % COUNT) + COUNT) % COUNT;
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/** Signed distance of a slide from the (fractional) carousel position, wrapping around the ends. */
+function wrapOffset(index: number, position: number) {
+  let d = (((index - position) % COUNT) + COUNT) % COUNT;
   if (d > COUNT / 2) d -= COUNT;
   return d;
 }
 
-function poseFor(d: number) {
-  if (d === 0) return { x: "0%", scale: 1, opacity: 1, filter: "brightness(1)" };
-  if (Math.abs(d) === 1) {
-    return { x: `${d * 17}%`, scale: 0.88, opacity: 0.75, filter: "brightness(0.55)" };
+/** Continuous look of a slide at distance `a` (0 = centre, 1 = neighbour, 2+ = hidden behind). */
+function poseAt(a: number) {
+  if (a <= 1) {
+    return {
+      shift: SIDE_SHIFT * 100 * a,
+      scale: lerp(1, 0.88, a),
+      opacity: lerp(1, 0.75, a),
+      brightness: lerp(1, 0.55, a),
+    };
   }
-  return { x: "0%", scale: 0.76, opacity: 0, filter: "brightness(0.4)" };
+  const t = Math.min(1, a - 1);
+  return {
+    shift: SIDE_SHIFT * 100 * (1 - t),
+    scale: lerp(0.88, 0.76, t),
+    opacity: lerp(0.75, 0, t),
+    brightness: lerp(0.55, 0.4, t),
+  };
+}
+
+type Photo = (typeof PHOTOS)[number];
+
+interface SlideProps {
+  photo: Photo;
+  slideIndex: number;
+  position: MotionValue<number>;
+  /** Offset from the current slide, used for accessibility and clicks only. */
+  d: number;
+  failed: boolean;
+  onFail: () => void;
+  onClick: () => void;
+}
+
+/** One slide. Its pose is derived from the shared position, so it follows the drag frame by frame. */
+function Slide({ photo, slideIndex, position, d, failed, onFail, onClick }: SlideProps) {
+  const x = useTransform(position, (p) => {
+    const off = wrapOffset(slideIndex, p);
+    return `${Math.sign(off) * poseAt(Math.abs(off)).shift}%`;
+  });
+  const scale = useTransform(position, (p) => poseAt(Math.abs(wrapOffset(slideIndex, p))).scale);
+  const opacity = useTransform(position, (p) => poseAt(Math.abs(wrapOffset(slideIndex, p))).opacity);
+  const filter = useTransform(
+    position,
+    (p) => `brightness(${poseAt(Math.abs(wrapOffset(slideIndex, p))).brightness})`,
+  );
+  const zIndex = useTransform(position, (p) =>
+    Math.round(3 - Math.min(2, Math.abs(wrapOffset(slideIndex, p)))),
+  );
+
+  return (
+    <motion.div
+      role="group"
+      aria-roledescription="slide"
+      aria-label={`${slideIndex + 1} of ${COUNT}`}
+      aria-hidden={d !== 0}
+      data-offset={d}
+      className="absolute inset-y-0 left-[9%] w-[82%] overflow-hidden rounded-2xl bg-white/5 shadow-lg cursor-pointer"
+      style={{
+        x,
+        scale,
+        opacity,
+        filter,
+        zIndex,
+        pointerEvents: Math.abs(d) > 1 ? "none" : "auto",
+      }}
+      onClick={onClick}
+    >
+      {failed ? (
+        <div
+          role="img"
+          aria-label={photo.alt}
+          className="flex h-full w-full items-center justify-center text-6xl font-semibold tracking-tight text-white/25"
+        >
+          BJ
+        </div>
+      ) : (
+        <img
+          src={photo.src}
+          alt={photo.alt}
+          width={1200}
+          height={800}
+          draggable={false}
+          decoding="async"
+          className="h-full w-full select-none object-cover object-[center_30%]"
+          onError={onFail}
+        />
+      )}
+    </motion.div>
+  );
 }
 
 export function Portrait() {
@@ -38,20 +135,48 @@ export function Portrait() {
   const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const dragging = useRef(false);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const controls = useRef<AnimationPlaybackControls | null>(null);
+  const target = useRef(0); // unbounded whole-number slide the carousel is heading to
+  const position = useMotionValue(0); // fractional, unbounded carousel position
 
+  // Whichever slide is nearest the front right now, updated live while scrolling.
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [panning, setPanning] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [failed, setFailed] = useState<boolean[]>(() => PHOTOS.map(() => false));
 
-  const next = useCallback(() => setIndex((i) => (i + 1) % COUNT), []);
-  const prev = useCallback(() => setIndex((i) => (i - 1 + COUNT) % COUNT), []);
+  /** Glide (or jump, with reduced motion) to a whole-number position. */
+  const moveTo = useCallback(
+    (to: number, velocity = 0) => {
+      target.current = to;
+      controls.current?.stop();
+      if (reduceMotion) position.set(to);
+      else controls.current = animate(position, to, { ...SPRING, velocity });
+    },
+    [position, reduceMotion],
+  );
+
+  const next = useCallback(() => moveTo(target.current + 1), [moveTo]);
+  const prev = useCallback(() => moveTo(target.current - 1), [moveTo]);
+  const goTo = useCallback(
+    (i: number) => moveTo(target.current + wrapOffset(i, target.current)),
+    [moveTo],
+  );
+
+  useMotionValueEvent(position, "change", (p) => {
+    const nearest = (((Math.round(p) % COUNT) + COUNT) % COUNT);
+    setIndex((prevIndex) => (prevIndex === nearest ? prevIndex : nearest));
+  });
+
+  useEffect(() => () => controls.current?.stop(), []);
 
   // Auto-advance. Restarts after every change of slide, so any manual interaction
   // gives the visitor a full interval before the next automatic move.
-  const autoplayOn = playing && !hovering && !focused && !viewerOpen && !reduceMotion;
+  const autoplayOn = playing && !hovering && !focused && !panning && !viewerOpen && !reduceMotion;
   useEffect(() => {
     if (!autoplayOn) return;
     const id = setTimeout(next, AUTOPLAY_MS);
@@ -66,13 +191,28 @@ export function Portrait() {
     if (!viewerOpen && dialog.open) dialog.close();
   }, [viewerOpen]);
 
-  function handleDragStart() {
-    dragging.current = true;
+  /** Pixels of dragging that equal one full slide step. */
+  function stepPx() {
+    const width = stageRef.current?.offsetWidth ?? 1;
+    return width * DRAG_SPAN;
   }
 
-  function handleDragEnd(_: unknown, info: PanInfo) {
-    if (info.offset.x < -SWIPE_DISTANCE || info.velocity.x < -SWIPE_VELOCITY) next();
-    else if (info.offset.x > SWIPE_DISTANCE || info.velocity.x > SWIPE_VELOCITY) prev();
+  function handlePanStart() {
+    dragging.current = true;
+    setPanning(true);
+    controls.current?.stop();
+  }
+
+  function handlePan(_: unknown, info: PanInfo) {
+    position.set(position.get() - info.delta.x / stepPx());
+  }
+
+  function handlePanEnd(_: unknown, info: PanInfo) {
+    const velocity = -info.velocity.x / stepPx(); // slides per second
+    const carry = Math.max(-MAX_FLING_SLIDES, Math.min(MAX_FLING_SLIDES, velocity * FLING_SECONDS));
+    // Settle on whichever slide is in front once the flick's momentum is added.
+    moveTo(Math.round(position.get() + carry), velocity);
+    setPanning(false);
     // Let the click that follows a drag pass before clicks count again.
     setTimeout(() => (dragging.current = false), 0);
   }
@@ -94,15 +234,6 @@ export function Portrait() {
     if (e.key === "ArrowRight") next();
     else if (e.key === "ArrowLeft") prev();
   }
-
-  const transition = reduceMotion
-    ? { duration: 0 }
-    : {
-        x: { type: "spring" as const, stiffness: 220, damping: 30 },
-        scale: { type: "spring" as const, stiffness: 220, damping: 30 },
-        opacity: { duration: 0.4 },
-        filter: { duration: 0.4 },
-      };
 
   const iconButton =
     "rounded-md p-2 text-white/70 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -131,63 +262,33 @@ export function Portrait() {
         onKeyDown={handleStageKeyDown}
         className="relative aspect-[1.83/1] w-full overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
-        {/* Dragging moves the whole row of slides, then it snaps back and the carousel advances */}
+        {/* Dragging scrubs the carousel position directly, so every slide moves with it and settles on release */}
         <motion.div
+          ref={stageRef}
           className="absolute inset-0 active:cursor-grabbing"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.15}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
+          style={{ touchAction: "pan-y" }}
+          onPanStart={handlePanStart}
+          onPan={handlePan}
+          onPanEnd={handlePanEnd}
         >
           {PHOTOS.map((photo, i) => {
-            const d = offsetFrom(i, index);
+            const d = wrapOffset(i, index);
             return (
-              <motion.div
+              <Slide
                 key={photo.src}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${i + 1} of ${COUNT}`}
-                aria-hidden={d !== 0}
-                data-offset={d}
-                className={`absolute inset-y-0 left-[9%] w-[82%] overflow-hidden rounded-2xl bg-white/5 shadow-lg cursor-pointer`}
-                style={{
-                  zIndex: 3 - Math.abs(d),
-                  pointerEvents: Math.abs(d) > 1 ? "none" : "auto",
-                }}
-                initial={false}
-                animate={poseFor(d)}
-                transition={transition}
+                photo={photo}
+                slideIndex={i}
+                position={position}
+                d={d}
+                failed={failed[i]}
+                onFail={() => setFailed((f) => f.map((v, j) => (j === i ? true : v)))}
                 onClick={() => {
                   if (dragging.current) return;
                   if (d === 0) setViewerOpen(true);
                   else if (d === 1) next();
                   else if (d === -1) prev();
                 }}
-              >
-                {failed[i] ? (
-                  <div
-                    role="img"
-                    aria-label={photo.alt}
-                    className="flex h-full w-full items-center justify-center text-6xl font-semibold tracking-tight text-white/25"
-                  >
-                    BJ
-                  </div>
-                ) : (
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    width={1200}
-                    height={800}
-                    draggable={false}
-                    decoding="async"
-                    className="h-full w-full select-none object-cover object-[center_30%]"
-                    onError={() =>
-                      setFailed((prevFailed) => prevFailed.map((f, j) => (j === i ? true : f)))
-                    }
-                  />
-                )}
-              </motion.div>
+              />
             );
           })}
         </motion.div>
@@ -206,7 +307,7 @@ export function Portrait() {
               type="button"
               aria-label={`Show photo ${i + 1} of ${COUNT}`}
               aria-current={i === index}
-              onClick={() => setIndex(i)}
+              onClick={() => goTo(i)}
               className="group py-3 focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary"
             >
               <span
