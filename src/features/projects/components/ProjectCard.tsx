@@ -200,17 +200,19 @@ export function ProjectCard({
                 <FaGithub size={20} />
               </motion.a>
 
-              <motion.a
-                href={project.live}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`${project.title} live site`}
-                className="hover:text-[--color-primary] transition-colors p-1"
-                whileHover={{ y: -3, scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <ExternalLink size={20} />
-              </motion.a>
+              {project.live && (
+                <motion.a
+                  href={project.live}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${project.title} live site`}
+                  className="hover:text-[--color-primary] transition-colors p-1"
+                  whileHover={{ y: -3, scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ExternalLink size={20} />
+                </motion.a>
+              )}
             </div>
           </div>
 
