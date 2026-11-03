@@ -7,7 +7,7 @@ export function ScrollToTop() {
   const scrollToTop = useScrollToTop();
 
   useEffect(() => {
-    scrollToTop("auto");
+    scrollToTop("instant");
   }, [pathname, scrollToTop]);
 
   return null;
