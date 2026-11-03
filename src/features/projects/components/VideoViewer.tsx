@@ -130,7 +130,6 @@ export function VideoViewer({ project, origin, onClose, onExited }: VideoViewerP
               src={video.src}
               poster={video.poster}
               autoPlay={!reduceMotion}
-              muted
               loop
               playsInline
               disablePictureInPicture

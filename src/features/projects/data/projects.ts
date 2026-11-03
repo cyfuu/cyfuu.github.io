@@ -37,7 +37,7 @@ export const projects: Project[] = [
     image: reframe,
     video: {
       src: `${BASE}projects/reframe-promo.mp4`,
-      poster: `${BASE}projects/reframe-poster.jpg`,
+      poster: `${BASE}projects/reframe-poster.png`,
     },
     live: "https://cyfuu.github.io/reframe/",
   },
