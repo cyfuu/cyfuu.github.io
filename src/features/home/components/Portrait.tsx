@@ -86,6 +86,12 @@ function Slide({ photo, slideIndex, position, d, failed, onFail, onClick }: Slid
   const zIndex = useTransform(position, (p) =>
     Math.round(3 - Math.min(2, Math.abs(wrapOffset(slideIndex, p)))),
   );
+  // The caption belongs to the front slide only: it fades out quickly as the slide leaves the
+  // centre and drifts up into place as it arrives, following the drag frame by frame.
+  const captionOpacity = useTransform(position, (p) =>
+    Math.max(0, 1 - Math.abs(wrapOffset(slideIndex, p)) * 2.5),
+  );
+  const captionY = useTransform(captionOpacity, (o) => `${(1 - o) * 12}px`);
 
   return (
     <motion.div
@@ -125,6 +131,22 @@ function Slide({ photo, slideIndex, position, d, failed, onFail, onClick }: Slid
           onError={onFail}
         />
       )}
+
+      {/* Bottom-up fade so the title stays readable on any photo */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
+        style={{ opacity: captionOpacity }}
+      />
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 bottom-0 px-[6%] pb-3 sm:pb-4"
+        style={{ opacity: captionOpacity, y: captionY }}
+      >
+        <span className="mb-1.5 block h-0.5 w-8 rounded-full" />
+        <p className="line-clamp-2 text-sm font-semibold leading-snug text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)] sm:text-base lg:text-lg">
+          {photo.title}
+        </p>
+      </motion.div>
     </motion.div>
   );
 }

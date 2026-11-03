@@ -1,4 +1,4 @@
-import { GraduationCap, Code, Users } from "lucide-react";
+import { GraduationCap, Code, Trophy } from "lucide-react";
 
 export const aboutItems = [
   {
@@ -14,9 +14,9 @@ export const aboutItems = [
       "Building web applications and exploring various programming languages and frameworks to solve real-world problems.",
   },
   {
-    icon: Users,
-    title: "Collaborative",
+    icon: Trophy,
+    title: "Competitor",
     description:
-      "Always eager to collaborate on exciting projects and connect with fellow developers and professionals.",
+      "I am always looking for new challenges and opportunities to grow, whether it's in my career or personal life.",
   },
 ];

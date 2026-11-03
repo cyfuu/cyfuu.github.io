@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { aboutItems } from "../data/aboutItems";
 import { sectionVariants, itemVariants } from "@shared/constants/animationVariants";
@@ -8,6 +9,8 @@ import { techLogos } from "../data/techLogos";
 
 export function AboutSection() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  // Touch screens have no hover, so a tap opens a card instead.
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const checkTouch = () => {
@@ -43,27 +46,56 @@ export function AboutSection() {
             visible: { transition: { staggerChildren: 0.15 } }
           }}
         >
-          {aboutItems.map((item) => (
+          {aboutItems.map((item, i) => (
             <motion.div
               key={item.title}
               variants={itemVariants}
-              className="group relative overflow-hidden p-5 sm:p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md
-                        hover:bg-white/10 transition-colors duration-700 ease-out shadow-lg"
+              tabIndex={0}
+              data-open={openIndex === i}
+              onClick={() => {
+                if (isTouchDevice) setOpenIndex(openIndex === i ? null : i);
+              }}
+              className="group relative flex h-40 sm:h-52 flex-col justify-end overflow-hidden p-5 sm:p-6 rounded-2xl
+                        border border-white/10 bg-white/5 backdrop-blur-md shadow-lg cursor-default
+                        hover:bg-white/10 data-[open=true]:bg-white/10 transition-colors duration-700 ease-out
+                        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               {/* The icon is the card's background: oversized, faint, and cropped by the card edge */}
               <item.icon
                 aria-hidden="true"
                 strokeWidth={1}
-                className="pointer-events-none absolute -right-10 -bottom-12 h-56 w-56 sm:h-64 sm:w-64 -rotate-12 text-primary opacity-[0.16] transition-all duration-700 ease-out group-hover:opacity-[0.28] group-hover:-rotate-6"
+                className="pointer-events-none absolute -right-10 -bottom-12 h-56 w-56 sm:h-64 sm:w-64 -rotate-12 text-primary opacity-[0.16]
+                          transition-all duration-700 ease-out
+                          group-hover:opacity-[0.28] group-hover:-rotate-6
+                          group-focus-visible:opacity-[0.28]
+                          group-data-[open=true]:opacity-[0.28] group-data-[open=true]:-rotate-6
+                          motion-reduce:transition-none"
               />
 
+              {/* Title sits at the bottom; the description opens beneath it and pushes the title up */}
               <div className="relative">
-                <h3 className="mb-2 sm:mb-3 text-lg sm:text-xl font-semibold text-white">
-                  {item.title}
-                </h3>
-                <p className="text-white/90 text-sm sm:text-base leading-relaxed">
-                  {item.description}
-                </p>
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white">{item.title}</h3>
+                  <Plus
+                    aria-hidden="true"
+                    size={20}
+                    className="shrink-0 text-white/60 transition-all duration-500
+                              group-hover:rotate-45 group-focus-visible:rotate-45 
+                              group-data-[open=true]:rotate-45 motion-reduce:transition-none"
+                  />
+                </div>
+
+                <div
+                  className="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-500 ease-out
+                            group-hover:grid-rows-[1fr] group-hover:opacity-100
+                            group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100
+                            group-data-[open=true]:grid-rows-[1fr] group-data-[open=true]:opacity-100
+                            motion-reduce:transition-none"
+                >
+                  <p className="min-h-0 overflow-hidden pt-2 text-white/90 text-sm lg:text-base leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}

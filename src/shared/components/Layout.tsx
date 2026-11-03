@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { Outlet } from "react-router";
 import { Navbar } from "@shared/components/Navbar";
 import { ScrollToTop } from "@shared/components/ScrollToTop";
@@ -8,9 +8,8 @@ import { BackToTopButton } from "@shared/components/BackToTopButton";
 
 export function Layout() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [snapEnabled, setSnapEnabled] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -24,19 +23,13 @@ export function Layout() {
     };
 
     scrollToTop();
-    requestAnimationFrame(() => setSnapEnabled(true));
-
-    const timeout = setTimeout(scrollToTop, 50);
-    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <ScrollContainerContext.Provider value={containerRef}>
       <div
         ref={containerRef}
-        className={`scroll-container h-dvh overflow-y-scroll ${
-          snapEnabled ? "snap-y snap-proximity" : ""
-        } bg-[--color-background] scroll-smooth`}
+        className="scroll-container h-svh overflow-y-scroll snap-y snap-proximity bg-[--color-background] scroll-smooth"
       >
         <ParticlesBg />
         <ScrollToTop />

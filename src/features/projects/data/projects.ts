@@ -32,7 +32,7 @@ export const projects: Project[] = [
     subtitle: "Developer Changelog Workspace",
     description:
       "A developer workspace that transforms raw GitHub commits into beautiful, human-readable changelogs.",
-    tech: ["React", "TypeScript", "Tailwind", "Vite", "Framer Motion"],
+    tech: ["React", "TypeScript", "Tailwind", "Vite", "Framer Motion", "Supabase"],
     link: "https://github.com/cyfuu/reframe",
     image: reframe,
     video: {
@@ -47,7 +47,7 @@ export const projects: Project[] = [
     subtitle: "Mobile Community Social App",
     description:
       "A mobile community social app built with Flutter and powered by Supabase as its cloud backend.",
-    tech: ["Flutter", "Dart", "Riverpod", "Supabase"],
+    tech: ["Flutter", "GoRouter", "Riverpod", "Supabase"],
     link: "https://github.com/cyfuu/pulso",
     image: pulso,
     video: {

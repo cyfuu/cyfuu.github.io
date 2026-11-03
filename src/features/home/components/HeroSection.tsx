@@ -7,7 +7,7 @@ import { Portrait } from "./Portrait";
 export function HeroSection() {
   return (
     <motion.section
-      className="snap-section snap-start min-h-[100dvh] flex items-center pt-16 sm:pt-20 select-none relative z-10"
+      className="snap-section snap-start min-h-[100svh] flex items-center pt-16 sm:pt-20 select-none relative z-10"
       initial="hidden"
       animate="visible"
       variants={heroVariants}
